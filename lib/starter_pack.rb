@@ -2,7 +2,7 @@ require 'fileutils'
 require 'open-uri'
 
 class StarterPack
-  @@serverBaseDir = "server"
+  @@serverBaseDir = "./server"
   @@available_plugins = [
     'citizens',
     'lwssi',
