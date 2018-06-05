@@ -69,9 +69,12 @@ class StarterPack
   end
 
   def survey_user
+    puts "\n\n======================================================================="
+    puts "Welcome to Bukkit Starter Pack. Let's configure your server properties."
+    puts "=======================================================================\n\n"
     @desired_properties = {}
     @@server_properties.each do |property|
-      print "#{humanize_property(property[:name])} (default is \"#{property[:default]}\")"
+      print "#{humanize_property(property[:name])} (default is \"#{property[:default]}\") Press [Enter] for default: "
       answer = gets.chomp
       @desired_properties[property[:name]] = answer.length > 0 ? answer : property[:default]
     end
@@ -237,16 +240,16 @@ class StarterPack
   end
 
   def create_eula
-    puts "Creating EULA..."
+    puts "\nCreating EULA..."
     File.open("#{@@serverBaseDir}/eula.txt", 'w+') do |eula|
       eula.puts "#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
       eula.puts "eula=false"
     end
-    puts "EULA created! Don't forget to accept it by going to the eula.txt file and changing 'false' to 'true'"
+    puts "EULA created! Don't forget to accept it by going to the eula.txt file and changing 'false' to 'true'\n\n"
   end
 
   def fetch_craftbukkit
-    puts "Downloading the latest craftbukkit..."
+    puts "Downloading the latest craftbukkit (Please be patient, this may take a while)..."
     File.open("#{@@serverBaseDir}/craftbukkit.jar", "wb+") do |craftbukkit|
       open("https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.12.2.jar", "rb") do |read_file|
         craftbukkit.write(read_file.read)
@@ -259,6 +262,6 @@ class StarterPack
   end
 
   def humanize_property(property)
-    property.gsub('-', ' ')
+    property.gsub('-', ' ').split(/ |\_|\-/).map(&:capitalize).join(" ")
   end
 end
