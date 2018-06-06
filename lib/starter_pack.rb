@@ -1,10 +1,18 @@
 class StarterPack
   @@serverBaseDir = "./server"
   @@available_plugins = [
-    'citizens',
-    'lwssi',
-    'map',
-    'another'
+    { name: 'Citizens', url: '' , download_url: '' },
+    { name: 'mcMMO', url: '' , download_url: '' },
+    { name: 'WorldEdit', url: '' , download_url: '' },
+    { name: 'WorldGuard', url: '' , download_url: '' },
+    { name: 'Vault', url: '' , download_url: '' },
+    { name: 'Shopchest', url: '' , download_url: '' },
+    { name: 'Essentials X', url: '' , download_url: '' },
+    { name: 'Essentials X Spawn', url: '' , download_url: '' },
+    { name: 'Essentials Chat', url: '' , download_url: '' },
+    { name: 'Multiverse Core', url: '' , download_url: '' },
+    { name: 'Multiverse Portals', url: '' , download_url: '' },
+    { name: 'Multiverse NetherPortals', url: '' , download_url: '' }
   ]
 
   @@server_properties = [
@@ -69,21 +77,32 @@ class StarterPack
   end
 
   def survey_user
-    puts "\n\n======================================================================="
-    puts "Welcome to Bukkit Starter Pack. Let's configure your server properties."
-    puts "=======================================================================\n\n"
+    headerize "Welcome to Bukkit Starter Pack. Let's configure your server properties."
+
     @desired_properties = {}
     @@server_properties.each do |property|
       print "#{humanize_property(property[:name])} (default is \"#{property[:default]}\") Press [Enter] for default: "
       answer = gets.chomp
       @desired_properties[property[:name]] = answer.length > 0 ? answer : property[:default]
     end
+
+    puts "Server properties configured."
+    print "\nWould you like to choose plugins? [Yn] "
+    choose_plugins = gets.chomp
+
+    survey_for_plugins unless choose_plugins == 'n' || choose_plugins == 'no'
+  end
+
+  def survey_for_plugins
+    headerize "Plugin Setup. Choose which plugins you'd like to use."
+    @@available_plugins.each do |plugin|
+      print "#{plugin[:name]} (#{plugin[:url]}) [Yn]: "
+      answer = gets.chomp
+    end
   end
 
   def create_file_from_fixture(filename)
-    File.open("#{@@serverBaseDir}/#{filename}", 'w+') do |file|
-      # Do stuff
-    end
+    FileUtils.cp("lib/file_fixtures/#{filename}", "#{@@serverBaseDir}")
     puts "Created #{filename}"
   end
 
@@ -116,5 +135,13 @@ class StarterPack
 
   def humanize_property(property)
     property.gsub('-', ' ').split(/ |\_|\-/).map(&:capitalize).join(" ")
+  end
+
+  def headerize(text)
+    puts "\n"
+    text.length.times { print "=" }
+    puts "\n#{text}"
+    text.length.times { print "=" }
+    puts "\n\n"
   end
 end

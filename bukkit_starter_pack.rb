@@ -1,4 +1,4 @@
-# Todo add file shebang
+#!/usr/bin/env ruby
 
 require 'fileutils'
 require 'open-uri'
